@@ -3,13 +3,13 @@
 require File.expand_path('lib/sitemap-parser/version', __dir__)
 
 Gem::Specification.new do |s|
-  s.name = 'sitemap-parser'
+  s.name = 'sitemap-parser-proxy'
   s.summary = 'Ruby Gem to parse sitemaps.org compliant sitemaps'
   s.description = 'Ruby Gem to parse sitemaps.org compliant sitemaps.'
   s.version = SitemapParser::VERSION
   s.authors = ['Ben Balter']
   s.email = 'ben.balter@github.com'
-  s.homepage = 'https://github.com/benbalter/sitemap-parser'
+  s.homepage = 'https://github.com/potenza/sitemap-parser-proxy'
   s.licenses = ['MIT']
   s.files = ['lib/sitemap-parser.rb', 'lib/sitemap-parser/version.rb']
   s.add_dependency('nokogiri', '~> 1.6')
