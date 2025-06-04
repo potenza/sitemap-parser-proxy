@@ -8,7 +8,7 @@ require_relative 'sitemap-parser/version'
 class SitemapParser
   def initialize(url, opts = {})
     @url = url
-    @options = { followlocation: true, recurse: false, url_regex: nil }.merge(opts)
+    @options = { followlocation: true, recurse: false, url_regex: nil, proxy: nil }.merge(opts)
   end
 
   def raw_sitemap
