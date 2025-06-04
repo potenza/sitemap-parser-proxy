@@ -5,7 +5,7 @@ require 'typhoeus'
 require 'zlib'
 require_relative 'sitemap-parser/version'
 
-class SitemapParser
+class SitemapParserProxy
   def initialize(url, opts = {})
     @url = url
     @options = { followlocation: true, recurse: false, url_regex: nil, proxy: nil }.merge(opts)
