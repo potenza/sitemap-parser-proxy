@@ -9,8 +9,8 @@ cd $(dirname "$0")/..
 
 # Build a new gem archive.
 
-rm -rf sitemap-parser-*.gem
-gem build -q sitemap-parser.gemspec
+rm -rf sitemap-parser-proxy-*.gem
+gem build -q sitemap-parser-proxy.gemspec
 
 # Make sure we're on the master branch.
 
@@ -21,7 +21,7 @@ gem build -q sitemap-parser.gemspec
 
 # Figure out what version we're releasing.
 
-tag=v`ls sitemap-parser-*.gem | sed 's/^sitemap-parser-\(.*\)\.gem$/\1/'`
+tag=v`ls sitemap-parser-proxy-*.gem | sed 's/^sitemap-parser-proxy-\(.*\)\.gem$/\1/'`
 
 # Make sure we haven't released this version before.
 
@@ -34,5 +34,5 @@ git fetch -t origin
 
 # Tag it and bag it.
 
-gem push sitemap-parser-*.gem && git tag "$tag" &&
+gem push sitemap-parser-proxy-*.gem && git tag "$tag" &&
   git push origin master && git push origin "$tag"

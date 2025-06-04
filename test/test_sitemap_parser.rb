@@ -12,8 +12,8 @@ class TestSitemapParser < Test::Unit::TestCase
     response = Typhoeus::Response.new(code: 200, headers: {}, body: File.read(local_file))
     Typhoeus.stub(url).and_return(response)
 
-    @sitemap = SitemapParser.new url
-    @local_sitemap = SitemapParser.new local_file
+    @sitemap = SitemapParserProxy.new url
+    @local_sitemap = SitemapParserProxy.new local_file
 
     @expected_count = 3
   end
@@ -42,7 +42,7 @@ class TestSitemapParser < Test::Unit::TestCase
     response = Typhoeus::Response.new(code: 404, headers: {}, body: '404')
     Typhoeus.stub(url).and_return(response)
 
-    sitemap = SitemapParser.new url
+    sitemap = SitemapParserProxy.new url
     assert_raise RuntimeError.new("HTTP request to #{url} failed") do
       sitemap.urls
     end
@@ -54,7 +54,7 @@ class TestSitemapParser < Test::Unit::TestCase
     response = Typhoeus::Response.new(code: 200, headers: {}, body: File.read(malformed_sitemap))
     Typhoeus.stub(url).and_return(response)
 
-    sitemap = SitemapParser.new url
+    sitemap = SitemapParserProxy.new url
     assert_raise RuntimeError.new('Malformed sitemap, url without loc') do
       sitemap.to_a
     end
@@ -65,7 +65,7 @@ class TestSitemapParser < Test::Unit::TestCase
     response = Typhoeus::Response.new(code: 200, headers: {}, body: '<foo>bar</foo>')
     Typhoeus.stub(url).and_return(response)
 
-    sitemap = SitemapParser.new url
+    sitemap = SitemapParserProxy.new url
     assert_raise RuntimeError.new('Malformed sitemap, no urlset') do
       sitemap.to_a
     end
@@ -80,7 +80,7 @@ class TestSitemapParser < Test::Unit::TestCase
       Typhoeus.stub(url).and_return(response)
     end
 
-    sitemap = SitemapParser.new 'https://example.com/sitemap_index.xml', recurse: true
+    sitemap = SitemapParserProxy.new 'https://example.com/sitemap_index.xml', recurse: true
     assert_equal 6, sitemap.to_a.size
     assert_equal 6, sitemap.urls.count
   end
@@ -94,7 +94,7 @@ class TestSitemapParser < Test::Unit::TestCase
       Typhoeus.stub(url).and_return(response)
     end
 
-    sitemap = SitemapParser.new 'https://example.com/sitemap_index.xml', recurse: true, url_regex: /sitemap2\.xml/
+    sitemap = SitemapParserProxy.new 'https://example.com/sitemap_index.xml', recurse: true, url_regex: /sitemap2\.xml/
     assert_equal 3, sitemap.to_a.size
     assert_equal 3, sitemap.urls.count
   end
@@ -108,7 +108,7 @@ class TestSitemapParser < Test::Unit::TestCase
       response = Typhoeus::Response.new(code: 200, headers: headers, body: File.read(fixture_path('sitemap.xml.gz')))
       Typhoeus.stub(url).and_return(response)
 
-      sitemap = SitemapParser.new url
+      sitemap = SitemapParserProxy.new url
       expected = ['http://ben.balter.com/', 'http://ben.balter.com/about/', 'http://ben.balter.com/contact/']
       assert_equal(expected, sitemap.to_a)
     end

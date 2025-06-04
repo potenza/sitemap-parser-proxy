@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('lib/sitemap-parser/version', __dir__)
+require File.expand_path('lib/sitemap-parser-proxy/version', __dir__)
 
 Gem::Specification.new do |s|
   s.name = 'sitemap-parser-proxy'

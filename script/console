@@ -1,1 +1,1 @@
-bundle exec irb -r "./lib/sitemap-parser.rb"
+bundle exec irb -r "./lib/sitemap-parser-proxy.rb"

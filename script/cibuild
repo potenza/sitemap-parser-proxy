@@ -4,4 +4,4 @@ set -e
 
 bundle exec rake test
 bundle exec rubocop
-bundle exec gem build sitemap-parser.gemspec
+bundle exec gem build sitemap-parser-proxy.gemspec
