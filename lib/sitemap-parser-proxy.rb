@@ -8,14 +8,17 @@ require_relative 'sitemap-parser-proxy/version'
 class SitemapParserProxy
   def initialize(url, opts = {})
     @url = url
-    @options = { followlocation: true, recurse: false, url_regex: nil, proxy: nil }.merge(opts)
+    @options = { followlocation: true, recurse: false, url_regex: nil }.merge(opts)
   end
 
   def raw_sitemap
     @raw_sitemap ||= begin
       if /\Ahttp/i.match?(@url)
         request_options = @options.dup.tap { |opts| opts.delete(:recurse); opts.delete(:url_regex) }
-        request = Typhoeus::Request.new(@url, request_options)
+
+        sitemap_url = @url
+        sitemap_url = "#{@options[:proxy_url]}#{@url}" if @options[:proxy_url]
+        request = Typhoeus::Request.new(sitemap_url, request_options)
         request.on_complete do |response|
           raise "HTTP request to #{@url} failed" unless response.success?
 
