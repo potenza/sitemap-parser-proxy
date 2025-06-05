@@ -6,9 +6,11 @@ require 'zlib'
 require_relative 'sitemap-parser-proxy/version'
 
 class SitemapParserProxy
+  # expects a proxy_url option to be passed in the options hash
   def initialize(url, opts = {})
     @url = url
     @options = { followlocation: true, recurse: false, url_regex: nil }.merge(opts)
+    @proxy_url = @options.delete(:proxy_url)
   end
 
   def raw_sitemap
@@ -17,7 +19,7 @@ class SitemapParserProxy
         request_options = @options.dup.tap { |opts| opts.delete(:recurse); opts.delete(:url_regex) }
 
         sitemap_url = @url
-        sitemap_url = "#{@options[:proxy_url]}#{@url}" if @options[:proxy_url]
+        sitemap_url = "#{@proxy_url}#{@url}"
         request = Typhoeus::Request.new(sitemap_url, request_options)
         request.on_complete do |response|
           raise "HTTP request to #{@url} failed" unless response.success?
@@ -44,7 +46,7 @@ class SitemapParserProxy
         urls = sitemap.at('sitemapindex').search('sitemap')
         filter_sitemap_urls(urls).each do |sitemap|
           child_sitemap_location = sitemap.at('loc').content
-          found_urls << self.class.new(child_sitemap_location, recurse: false).urls
+          found_urls << self.class.new(child_sitemap_location, recurse: false, proxy_url: @proxy_url).urls
         end
       end
       found_urls.flatten
